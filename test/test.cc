@@ -2,8 +2,6 @@
 
 #include "s21_matrix_oop.h"
 
-#define ERROR 0
-
 TEST(TestMemory, Many_rows) {
   int rows = -2;
   int cols = 3;
@@ -47,9 +45,9 @@ TEST(TestEqual, Error_equal) {
   S21Matrix M(rows, cols);
   S21Matrix N;
   int result = (M == N);
-  ASSERT_EQ(result, ERROR);
+  ASSERT_FALSE(result);
   result = M.EqMatrix(N);
-  ASSERT_EQ(result, ERROR);
+  ASSERT_FALSE(result);
 }
 
 TEST(TestEqual, Operator_equal) {
@@ -114,8 +112,8 @@ TEST(TestEqual, Equal_matrix) {
   N(0, 1) = 2;
   N(1, 0) = 3;
   N(1, 1) = 4;
-  ASSERT_EQ(!ERROR, M == N);
-  ASSERT_EQ(!ERROR, M.EqMatrix(N));
+  ASSERT_EQ(M, N);
+  ASSERT_TRUE(M.EqMatrix(N));
 }
 
 TEST(TestEqual, Not_equal_matrix_1) {
@@ -130,8 +128,8 @@ TEST(TestEqual, Not_equal_matrix_1) {
   N(0, 1) = 2;
   N(1, 0) = 8;
   N(1, 1) = 4;
-  ASSERT_EQ(ERROR, M == N);
-  ASSERT_EQ(ERROR, M.EqMatrix(N));
+  ASSERT_NE(M, N);
+  ASSERT_FALSE(M.EqMatrix(N));
 }
 
 TEST(TestEqual, Not_equal_matrix_2) {
@@ -145,7 +143,7 @@ TEST(TestEqual, Not_equal_matrix_2) {
       N(i, j) = M(i, j) + 0.00000001;
     }
   }
-  ASSERT_EQ(ERROR, M == N);
+  ASSERT_NE(M, N);
 }
 
 TEST(TestSum, Sum_operator) {
@@ -612,15 +610,15 @@ TEST(TestInverseMatrix, Inverse_loop) {
   S21Matrix Res1 = M.InverseMatrix();
   M.MulMatrix(Res1);
 
-  ASSERT_NEAR(M(0, 0), 1, EPSILON);
-  ASSERT_NEAR(M(0, 1), 0, EPSILON);
-  ASSERT_NEAR(M(0, 2), 0, EPSILON);
-  ASSERT_NEAR(M(1, 0), 0, EPSILON);
-  ASSERT_NEAR(M(1, 1), 1, EPSILON);
-  ASSERT_NEAR(M(1, 2), 0, EPSILON);
-  ASSERT_NEAR(M(2, 0), 0, EPSILON);
-  ASSERT_NEAR(M(2, 1), 0, EPSILON);
-  ASSERT_NEAR(M(2, 2), 1, EPSILON);
+  ASSERT_NEAR(M(0, 0), 1, kEpsilon);
+  ASSERT_NEAR(M(0, 1), 0, kEpsilon);
+  ASSERT_NEAR(M(0, 2), 0, kEpsilon);
+  ASSERT_NEAR(M(1, 0), 0, kEpsilon);
+  ASSERT_NEAR(M(1, 1), 1, kEpsilon);
+  ASSERT_NEAR(M(1, 2), 0, kEpsilon);
+  ASSERT_NEAR(M(2, 0), 0, kEpsilon);
+  ASSERT_NEAR(M(2, 1), 0, kEpsilon);
+  ASSERT_NEAR(M(2, 2), 1, kEpsilon);
 }
 
 TEST(TestDeterminant, Det_1) {
