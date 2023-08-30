@@ -153,7 +153,7 @@ double S21Matrix::Determinant() const {
 
 S21Matrix S21Matrix::InverseMatrix() const {
   double determinant = Determinant();
-  if (fabs(determinant) < EPSILON) {
+  if (fabs(determinant) < kEpsilon) {
     throw std::invalid_argument("The matrix determinant is 0.");
   }
   S21Matrix result(rows_, cols_);
@@ -189,6 +189,10 @@ bool S21Matrix::operator==(const S21Matrix& other) const noexcept {
     output = EqualNumbers(other);
   }
   return output;
+}
+
+bool S21Matrix::operator!=(const S21Matrix& other) const noexcept {
+  return !(*this == other);
 }
 
 S21Matrix S21Matrix::operator+(const S21Matrix& second) const {
@@ -308,7 +312,7 @@ bool S21Matrix::EqualNumbers(const S21Matrix& other) const noexcept {
   bool output = true;
   for (int i = 0; i < rows_ && output; ++i) {
     for (int j = 0; j < cols_ && output; ++j) {
-      if (fabs(this->matrix_[i][j] - other.matrix_[i][j]) > EPSILON) {
+      if (fabs(this->matrix_[i][j] - other.matrix_[i][j]) > kEpsilon) {
         output = false;
       }
     }

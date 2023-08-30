@@ -1,11 +1,11 @@
 #ifndef S21_MATRIX_OOP_LIB_S21_MATRIX_OOP_H_
 #define S21_MATRIX_OOP_LIB_S21_MATRIX_OOP_H_
 
-#include <math.h>
+#include <cmath>
 
 #include <iostream>
 
-#define EPSILON (1.0E-8)
+const double kEpsilon = 1.0E-8;
 
 class S21Matrix {
  public:
@@ -31,6 +31,7 @@ class S21Matrix {
   S21Matrix InverseMatrix() const;
 
   bool operator==(const S21Matrix &other) const noexcept;
+  bool operator!=(const S21Matrix &other) const noexcept;
   S21Matrix &operator=(const S21Matrix &other);
   S21Matrix &operator=(S21Matrix &&other);
   S21Matrix operator+(const S21Matrix &second) const;
