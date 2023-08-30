@@ -8,7 +8,7 @@ BROWSER_OPENER = @x-www-browser
 LEAK_CMD = CK_FORK=no valgrind --leak-check=full ./$(TEST_PATH)
 endif
 GNU_COMPILER = -D CMAKE_CXX_COMPILER=g++ -D CMAKE_C_COMPILER=gcc
-APP_LIB_PATH = s21_matrix_oop.a
+APP_LIB_PATH = matrix_oop.a
 SRC_DIR = ./lib
 SRC_EXT = cc
 TEST_PATH = buildRelease/test
@@ -19,7 +19,7 @@ all: clean buildRelease
 
 $(APP_LIB_PATH): buildRelease
 	@cmake --build buildRelease --target test
-	cp ./buildRelease/libs21_matrix_oop.a ./${APP_LIB_PATH}
+	cp ./buildRelease/lib_matrix_oop.a ./${APP_LIB_PATH}
 
 clean:
 	@rm -rf buildRelease 2>/dev/null

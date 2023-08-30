@@ -1,12 +1,12 @@
 #include <gtest/gtest.h>
 
-#include "s21_matrix_oop.h"
+#include "matrix_oop.h"
 
 TEST(TestMemory, Many_rows) {
   int rows = -2;
   int cols = 3;
   try {
-    S21Matrix M(rows, cols);
+    Matrix M(rows, cols);
     FAIL();
   } catch (...) {
     SUCCEED();
@@ -17,7 +17,7 @@ TEST(TestMemory, Many_cols) {
   int rows = 2;
   int cols = -3;
   try {
-    S21Matrix M(rows, cols);
+    Matrix M(rows, cols);
     FAIL();
   } catch (...) {
     SUCCEED();
@@ -27,14 +27,14 @@ TEST(TestMemory, Many_cols) {
 TEST(TestConst, Const) {
   int rows = 2;
   int cols = 3;
-  const S21Matrix N(rows, cols);
-  const S21Matrix M(rows, cols);
-  S21Matrix R(rows, cols);
+  const Matrix N(rows, cols);
+  const Matrix M(rows, cols);
+  Matrix R(rows, cols);
   ASSERT_EQ(cols, N.GetCols());
   ASSERT_EQ(rows, N.GetRows());
   ASSERT_EQ(true, N == M);
 
-  const S21Matrix I = R + N;
+  const Matrix I = R + N;
 
   ASSERT_EQ(0, N(0, 0));
 }
@@ -42,8 +42,8 @@ TEST(TestConst, Const) {
 TEST(TestEqual, Error_equal) {
   int rows = 2;
   int cols = 3;
-  S21Matrix M(rows, cols);
-  S21Matrix N;
+  Matrix M(rows, cols);
+  Matrix N;
   int result = (M == N);
   ASSERT_FALSE(result);
   result = M.EqMatrix(N);
@@ -53,8 +53,8 @@ TEST(TestEqual, Error_equal) {
 TEST(TestEqual, Operator_equal) {
   int rows = 2;
   int cols = 3;
-  S21Matrix M(rows, cols);
-  S21Matrix N;
+  Matrix M(rows, cols);
+  Matrix N;
   N = M;
   for (int i = 0; i < rows; ++i) {
     for (int j = 0; j < cols; ++j) {
@@ -66,9 +66,9 @@ TEST(TestEqual, Operator_equal) {
 TEST(TestEqual, Not_equal_after_move) {
   int rows = 2;
   int cols = 3;
-  S21Matrix M(rows, cols);
-  S21Matrix R(rows, cols);
-  S21Matrix N = S21Matrix(std::move(M));
+  Matrix M(rows, cols);
+  Matrix R(rows, cols);
+  Matrix N = Matrix(std::move(M));
   for (int i = 0; i < rows; ++i) {
     for (int j = 0; j < cols; ++j) {
       ASSERT_EQ(R(i, j), N(i, j));
@@ -81,9 +81,9 @@ TEST(TestEqual, Not_equal_after_move) {
 TEST(TestEqual, Not_equal_after_move_2) {
   int rows = 2;
   int cols = 3;
-  S21Matrix M(rows, cols);
-  S21Matrix R(rows, cols);
-  S21Matrix N = std::move(M);
+  Matrix M(rows, cols);
+  Matrix R(rows, cols);
+  Matrix N = std::move(M);
   for (int i = 0; i < rows; ++i) {
     for (int j = 0; j < cols; ++j) {
       ASSERT_EQ(R(i, j), N(i, j));
@@ -94,15 +94,15 @@ TEST(TestEqual, Not_equal_after_move_2) {
 }
 
 TEST(TestEqual, Insert_number) {
-  S21Matrix M(1, 1);
+  Matrix M(1, 1);
   double num = 1.0;
   M(0, 0) = num;
   ASSERT_EQ(M(0, 0), num);
 }
 
 TEST(TestEqual, Equal_matrix) {
-  S21Matrix M(2, 2);
-  S21Matrix N(2, 2);
+  Matrix M(2, 2);
+  Matrix N(2, 2);
   M(0, 0) = 1;
   M(0, 1) = 2;
   M(1, 0) = 3;
@@ -117,8 +117,8 @@ TEST(TestEqual, Equal_matrix) {
 }
 
 TEST(TestEqual, Not_equal_matrix_1) {
-  S21Matrix M(2, 2);
-  S21Matrix N(2, 2);
+  Matrix M(2, 2);
+  Matrix N(2, 2);
   M(0, 0) = 1;
   M(0, 1) = 2;
   M(1, 0) = 3;
@@ -135,8 +135,8 @@ TEST(TestEqual, Not_equal_matrix_1) {
 TEST(TestEqual, Not_equal_matrix_2) {
   int rows = 7;
   int columns = 10;
-  S21Matrix M(rows, columns);
-  S21Matrix N(rows, columns);
+  Matrix M(rows, columns);
+  Matrix N(rows, columns);
   for (int i = 0; i < rows; ++i) {
     for (int j = 0; j < columns; ++j) {
       M(i, j) = (double)(i + j) + 0.123;
@@ -149,8 +149,8 @@ TEST(TestEqual, Not_equal_matrix_2) {
 TEST(TestSum, Sum_operator) {
   int rows = 2;
   int cols = 2;
-  S21Matrix M(rows, cols);
-  S21Matrix N(rows, cols);
+  Matrix M(rows, cols);
+  Matrix N(rows, cols);
   M(0, 0) = 1;
   M(0, 1) = 2;
   M(1, 0) = 3;
@@ -161,13 +161,13 @@ TEST(TestSum, Sum_operator) {
   N(1, 0) = 3;
   N(1, 1) = 4;
 
-  S21Matrix RealRes(rows, cols);
+  Matrix RealRes(rows, cols);
   RealRes(0, 0) = 2;
   RealRes(0, 1) = 4;
   RealRes(1, 0) = 6;
   RealRes(1, 1) = 8;
 
-  S21Matrix R = M + N;
+  Matrix R = M + N;
   for (int i = 0; i < rows; ++i) {
     for (int j = 0; j < cols; ++j) {
       ASSERT_EQ(RealRes(i, j), R(i, j));
@@ -184,8 +184,8 @@ TEST(TestSum, Sum_operator) {
 TEST(TestSum, Adding_matrix) {
   int rows = 2;
   int cols = 2;
-  S21Matrix M(rows, cols);
-  S21Matrix N(rows, cols);
+  Matrix M(rows, cols);
+  Matrix N(rows, cols);
   M(0, 0) = 1;
   M(0, 1) = 2;
   M(1, 0) = 3;
@@ -196,7 +196,7 @@ TEST(TestSum, Adding_matrix) {
   N(1, 0) = 3;
   N(1, 1) = 4;
 
-  S21Matrix RealRes(rows, cols);
+  Matrix RealRes(rows, cols);
   RealRes(0, 0) = 2;
   RealRes(0, 1) = 4;
   RealRes(1, 0) = 6;
@@ -213,8 +213,8 @@ TEST(TestSum, Adding_matrix) {
 TEST(TestSum, Adding_matrix_func) {
   int rows = 2;
   int cols = 2;
-  S21Matrix M(rows, cols);
-  S21Matrix N(rows, cols);
+  Matrix M(rows, cols);
+  Matrix N(rows, cols);
   M(0, 0) = 1;
   M(0, 1) = 2;
   M(1, 0) = 3;
@@ -225,7 +225,7 @@ TEST(TestSum, Adding_matrix_func) {
   N(1, 0) = 3;
   N(1, 1) = 4;
 
-  S21Matrix RealRes(rows, cols);
+  Matrix RealRes(rows, cols);
   RealRes(0, 0) = 2;
   RealRes(0, 1) = 4;
   RealRes(1, 0) = 6;
@@ -240,8 +240,8 @@ TEST(TestSum, Adding_matrix_func) {
 }
 
 TEST(TestSub, Sub_operator) {
-  S21Matrix M(2, 2);
-  S21Matrix N(2, 2);
+  Matrix M(2, 2);
+  Matrix N(2, 2);
   M(0, 0) = 1;
   M(0, 1) = 2;
   M(1, 0) = 3;
@@ -252,8 +252,8 @@ TEST(TestSub, Sub_operator) {
   N(1, 0) = 8;
   N(1, 1) = 4;
 
-  S21Matrix R = M - N;
-  S21Matrix RealRes(2, 2);
+  Matrix R = M - N;
+  Matrix RealRes(2, 2);
   RealRes(0, 0) = 0;
   RealRes(0, 1) = 0;
   RealRes(1, 0) = -5;
@@ -267,8 +267,8 @@ TEST(TestSub, Sub_operator) {
 }
 
 TEST(TestSub, Sub_matrix_func) {
-  S21Matrix M(2, 2);
-  S21Matrix N(2, 2);
+  Matrix M(2, 2);
+  Matrix N(2, 2);
   M(0, 0) = 1;
   M(0, 1) = 2;
   M(1, 0) = 3;
@@ -281,7 +281,7 @@ TEST(TestSub, Sub_matrix_func) {
 
   M -= N;
 
-  S21Matrix RealRes(2, 2);
+  Matrix RealRes(2, 2);
   RealRes(0, 0) = 0;
   RealRes(0, 1) = 0;
   RealRes(1, 0) = 0;
@@ -307,8 +307,8 @@ TEST(TestSub, Sub_matrix_func) {
 }
 
 TEST(TestMulNum, Mul_num_oper) {
-  S21Matrix M(2, 2);
-  S21Matrix N(2, 2);
+  Matrix M(2, 2);
+  Matrix N(2, 2);
   M(0, 0) = 1;
   M(0, 1) = 2;
   M(1, 0) = 3;
@@ -316,9 +316,9 @@ TEST(TestMulNum, Mul_num_oper) {
 
   double num = -1;
 
-  S21Matrix R = M * num;
+  Matrix R = M * num;
 
-  S21Matrix RealRes(2, 2);
+  Matrix RealRes(2, 2);
   RealRes(0, 0) = -1;
   RealRes(0, 1) = -2;
   RealRes(1, 0) = -3;
@@ -332,8 +332,8 @@ TEST(TestMulNum, Mul_num_oper) {
 }
 
 TEST(TestMulNum, Mul_num_oper_2) {
-  S21Matrix M(2, 2);
-  S21Matrix N(2, 2);
+  Matrix M(2, 2);
+  Matrix N(2, 2);
   M(0, 0) = 1;
   M(0, 1) = 2;
   M(1, 0) = 3;
@@ -341,9 +341,9 @@ TEST(TestMulNum, Mul_num_oper_2) {
 
   double num = -1;
 
-  S21Matrix R = num * M;
+  Matrix R = num * M;
 
-  S21Matrix RealRes(2, 2);
+  Matrix RealRes(2, 2);
   RealRes(0, 0) = -1;
   RealRes(0, 1) = -2;
   RealRes(1, 0) = -3;
@@ -357,7 +357,7 @@ TEST(TestMulNum, Mul_num_oper_2) {
 }
 
 TEST(TestMulNum, Mul_adding_to_matrix) {
-  S21Matrix M(2, 2);
+  Matrix M(2, 2);
   M(0, 0) = 1;
   M(0, 1) = 2;
   M(1, 0) = 3;
@@ -366,7 +366,7 @@ TEST(TestMulNum, Mul_adding_to_matrix) {
   double num = -1;
 
   M *= num;
-  S21Matrix RealRes(2, 2);
+  Matrix RealRes(2, 2);
   RealRes(0, 0) = -1;
   RealRes(0, 1) = -2;
   RealRes(1, 0) = -3;
@@ -392,8 +392,8 @@ TEST(TestMulNum, Mul_adding_to_matrix) {
 }
 
 TEST(TestMatrixMul, Mul_matrix_1) {
-  S21Matrix M(2, 2);
-  S21Matrix N(2, 2);
+  Matrix M(2, 2);
+  Matrix N(2, 2);
   M(0, 0) = 1;
   M(0, 1) = 2;
   M(1, 0) = 3;
@@ -405,7 +405,7 @@ TEST(TestMatrixMul, Mul_matrix_1) {
   N(1, 1) = 4;
 
   M *= N;
-  S21Matrix RealRes(2, 2);
+  Matrix RealRes(2, 2);
   RealRes(0, 0) = 7;
   RealRes(0, 1) = 10;
   RealRes(1, 0) = 15;
@@ -431,7 +431,7 @@ TEST(TestMatrixMul, Mul_matrix_1) {
 }
 
 TEST(TestMatrixMul, Mul_matrix_2) {
-  S21Matrix M(2, 3);
+  Matrix M(2, 3);
   M(0, 0) = 3.9;
   M(0, 1) = 0.4;
   M(0, 2) = 8345;
@@ -439,7 +439,7 @@ TEST(TestMatrixMul, Mul_matrix_2) {
   M(1, 1) = 6.0;
   M(1, 2) = 24.9;
 
-  S21Matrix N(3, 2);
+  Matrix N(3, 2);
   N(0, 0) = 138.49;
   N(0, 1) = 245.6;
   N(1, 0) = 3.0;
@@ -447,15 +447,15 @@ TEST(TestMatrixMul, Mul_matrix_2) {
   N(2, 0) = 0;
   N(2, 1) = 0;
 
-  S21Matrix R = N * M;
+  Matrix R = N * M;
 
-  S21Matrix RealRes1(2, 2);
+  Matrix RealRes1(2, 2);
   RealRes1(0, 0) = 541.311;
   RealRes1(0, 1) = 958.1776;
   RealRes1(1, 0) = 826.144546;
   RealRes1(1, 1) = 1438.23824;
 
-  S21Matrix RealRes2(3, 3);
+  Matrix RealRes2(3, 3);
   RealRes2(0, 0) = 1973.28524;
   RealRes2(0, 1) = 1528.996;
   RealRes2(0, 2) = 1161814.49;
@@ -478,8 +478,8 @@ TEST(TestMatrixMul, Mul_matrix_2) {
 }
 
 TEST(TestMatrixMul, Mul_matrix_operator) {
-  S21Matrix M(2, 2);
-  S21Matrix N(2, 2);
+  Matrix M(2, 2);
+  Matrix N(2, 2);
   M(0, 0) = 1;
   M(0, 1) = 2;
   M(1, 0) = 3;
@@ -490,9 +490,9 @@ TEST(TestMatrixMul, Mul_matrix_operator) {
   N(1, 0) = 3;
   N(1, 1) = 4;
 
-  S21Matrix R = M * N;
+  Matrix R = M * N;
 
-  S21Matrix RealRes(2, 2);
+  Matrix RealRes(2, 2);
   RealRes(0, 0) = 7;
   RealRes(0, 1) = 10;
   RealRes(1, 0) = 15;
@@ -506,14 +506,14 @@ TEST(TestMatrixMul, Mul_matrix_operator) {
 }
 
 TEST(TestTransposeMatrix, Transpose_1) {
-  S21Matrix M(2, 2);
+  Matrix M(2, 2);
   M(0, 0) = 1;
   M(0, 1) = 2;
   M(1, 0) = 3;
   M(1, 1) = 4;
 
-  S21Matrix R = M.Transpose();
-  S21Matrix RealRes(2, 2);
+  Matrix R = M.Transpose();
+  Matrix RealRes(2, 2);
   RealRes(0, 0) = 1;
   RealRes(0, 1) = 3;
   RealRes(1, 0) = 2;
@@ -527,7 +527,7 @@ TEST(TestTransposeMatrix, Transpose_1) {
 }
 
 TEST(TestTransposeMatrix, Transpose_2) {
-  S21Matrix M(2, 3);
+  Matrix M(2, 3);
   M(0, 0) = 3.9;
   M(0, 1) = 0.4;
   M(0, 2) = 8345;
@@ -535,8 +535,8 @@ TEST(TestTransposeMatrix, Transpose_2) {
   M(1, 1) = 6.0;
   M(1, 2) = 24.9;
 
-  S21Matrix R = M.Transpose();
-  S21Matrix RealRes(3, 2);
+  Matrix R = M.Transpose();
+  Matrix RealRes(3, 2);
   RealRes(0, 0) = 3.9;
   RealRes(0, 1) = 5.8354;
   RealRes(1, 0) = 0.4;
@@ -552,15 +552,15 @@ TEST(TestTransposeMatrix, Transpose_2) {
 }
 
 TEST(TestInverseMatrix, Inverse_1) {
-  S21Matrix M(2, 2);
+  Matrix M(2, 2);
   M(0, 0) = 1;
   M(0, 1) = 2;
   M(1, 0) = 3;
   M(1, 1) = 4;
 
-  S21Matrix R = M.InverseMatrix();
+  Matrix R = M.InverseMatrix();
 
-  S21Matrix RealRes(2, 2);
+  Matrix RealRes(2, 2);
   RealRes(0, 0) = -2;
   RealRes(0, 1) = 1;
   RealRes(1, 0) = 1.5;
@@ -574,10 +574,10 @@ TEST(TestInverseMatrix, Inverse_1) {
 }
 
 TEST(TestInverseMatrix, Inverse_2) {
-  S21Matrix M(1, 1);
+  Matrix M(1, 1);
   M(0, 0) = 1;
 
-  S21Matrix R = M.InverseMatrix();
+  Matrix R = M.InverseMatrix();
   ASSERT_EQ(1, R.GetRows());
   ASSERT_EQ(1, R.GetCols());
 
@@ -589,7 +589,7 @@ TEST(TestInverseMatrix, Inverse_2) {
 }
 
 TEST(TestInverseMatrix, Inverse_3) {
-  S21Matrix M(3, 3);
+  Matrix M(3, 3);
   M(0, 0) = 1;
   M(0, 1) = 2;
   M(0, 2) = 2;
@@ -600,9 +600,9 @@ TEST(TestInverseMatrix, Inverse_3) {
   M(2, 1) = 5;
   M(2, 2) = 6;
 
-  S21Matrix R = M.InverseMatrix();
+  Matrix R = M.InverseMatrix();
 
-  S21Matrix RealRes(3, 3);
+  Matrix RealRes(3, 3);
   RealRes(0, 0) = -5;
   RealRes(0, 1) = 2;
   RealRes(0, 2) = 0;
@@ -621,7 +621,7 @@ TEST(TestInverseMatrix, Inverse_3) {
 }
 
 TEST(TestInverseMatrix, Inverse_loop) {
-  S21Matrix M(3, 3);
+  Matrix M(3, 3);
   M(0, 0) = rand();
   M(0, 1) = rand();
   M(0, 2) = rand();
@@ -632,7 +632,7 @@ TEST(TestInverseMatrix, Inverse_loop) {
   M(2, 1) = rand();
   M(2, 2) = rand();
 
-  S21Matrix Res1 = M.InverseMatrix();
+  Matrix Res1 = M.InverseMatrix();
   M.MulMatrix(Res1);
 
   ASSERT_NEAR(M(0, 0), 1, kEpsilon);
@@ -647,7 +647,7 @@ TEST(TestInverseMatrix, Inverse_loop) {
 }
 
 TEST(TestDeterminant, Det_1) {
-  S21Matrix M(2, 2);
+  Matrix M(2, 2);
   M(0, 0) = 1;
   M(0, 1) = 2;
   M(1, 0) = 3;
@@ -658,7 +658,7 @@ TEST(TestDeterminant, Det_1) {
 }
 
 TEST(TestDeterminant, Det_2) {
-  S21Matrix M(2, 2);
+  Matrix M(2, 2);
   M(0, 0) = 109.56;
   M(0, 1) = 25;
   M(1, 0) = 334.684;
@@ -669,7 +669,7 @@ TEST(TestDeterminant, Det_2) {
 }
 
 TEST(TestDeterminant, Det_3) {
-  S21Matrix M(3, 3);
+  Matrix M(3, 3);
   M(0, 0) = 109.56;
   M(0, 1) = 25;
   M(0, 2) = 334.684;
@@ -685,7 +685,7 @@ TEST(TestDeterminant, Det_3) {
 }
 
 TEST(TestDeterminant, Det_4) {
-  S21Matrix M(1, 1);
+  Matrix M(1, 1);
   M(0, 0) = 109.56;
 
   double R = M.Determinant();
@@ -693,7 +693,7 @@ TEST(TestDeterminant, Det_4) {
 }
 
 TEST(TestCalcComp, Matrix_3) {
-  S21Matrix M(3, 3);
+  Matrix M(3, 3);
   M(0, 0) = 1;
   M(0, 1) = 2;
   M(0, 2) = 3;
@@ -704,9 +704,9 @@ TEST(TestCalcComp, Matrix_3) {
   M(2, 1) = 2;
   M(2, 2) = 1;
 
-  S21Matrix R = M.CalcComplements();
+  Matrix R = M.CalcComplements();
 
-  S21Matrix RealRes(3, 3);
+  Matrix RealRes(3, 3);
   RealRes(0, 0) = 0;
   RealRes(0, 1) = 10;
   RealRes(0, 2) = -20;
@@ -725,10 +725,10 @@ TEST(TestCalcComp, Matrix_3) {
 }
 
 TEST(TestCalcComp, Matrix_1) {
-  S21Matrix M(1, 1);
+  Matrix M(1, 1);
   M(0, 0) = 1;
 
-  S21Matrix R = M.CalcComplements();
+  Matrix R = M.CalcComplements();
 
   for (int i = 0; i < M.GetRows(); ++i) {
     for (int j = 0; j < M.GetCols(); ++j) {
@@ -738,7 +738,7 @@ TEST(TestCalcComp, Matrix_1) {
 }
 
 TEST(TestCalcComp, Matrix_4) {
-  S21Matrix M(4, 4);
+  Matrix M(4, 4);
   M(0, 0) = 9;
   M(0, 1) = 7;
   M(0, 2) = 0;
@@ -756,9 +756,9 @@ TEST(TestCalcComp, Matrix_4) {
   M(3, 2) = 0;
   M(3, 3) = 10;
 
-  S21Matrix R = M.CalcComplements();
+  Matrix R = M.CalcComplements();
 
-  S21Matrix RealRes(4, 4);
+  Matrix RealRes(4, 4);
   RealRes(0, 0) = 0;
   RealRes(0, 1) = -365;
   RealRes(0, 2) = 0;
@@ -784,23 +784,23 @@ TEST(TestCalcComp, Matrix_4) {
 }
 
 TEST(TestOperations, Different_operations) {
-  S21Matrix M(1, 1);
+  Matrix M(1, 1);
   M(0, 0) = 1;
-  S21Matrix N(1, 1);
+  Matrix N(1, 1);
   N(0, 0) = 2;
-  S21Matrix T(1, 4);
+  Matrix T(1, 4);
   T(0, 0) = 1;
   T(0, 0) = 2;
   T(0, 0) = 3;
   T(0, 0) = 4;
 
-  S21Matrix RealRes(1, 4);
+  Matrix RealRes(1, 4);
   RealRes(0, 0) = 2;
   RealRes(0, 0) = 4;
   RealRes(0, 0) = 6;
   RealRes(0, 0) = 8;
 
-  S21Matrix R = (M + N) * T - T;
+  Matrix R = (M + N) * T - T;
 
   for (int i = 0; i < R.GetRows(); ++i) {
     for (int j = 0; j < R.GetCols(); ++j) {
@@ -812,12 +812,12 @@ TEST(TestOperations, Different_operations) {
 TEST(TestExcept, Different_matrix) {
   int rows = 1;
   int cols = 1;
-  S21Matrix M;
-  S21Matrix N(rows, cols);
+  Matrix M;
+  Matrix N(rows, cols);
   N(0, 0) = 1;
 
   try {
-    S21Matrix R = M + N;
+    Matrix R = M + N;
     FAIL();
   } catch (std::invalid_argument& ex) {
     EXPECT_STREQ("Different matrix dimensions.", ex.what());
@@ -827,12 +827,12 @@ TEST(TestExcept, Different_matrix) {
 TEST(TestExcept, Different_matrix_2) {
   int rows = 1;
   int cols = 1;
-  S21Matrix M(rows + 1, cols);
-  S21Matrix N(rows, cols);
+  Matrix M(rows + 1, cols);
+  Matrix N(rows, cols);
   N(0, 0) = 1;
 
   try {
-    S21Matrix R = M - N;
+    Matrix R = M - N;
     FAIL();
   } catch (std::invalid_argument& ex) {
     EXPECT_STREQ("Different matrix dimensions.", ex.what());
@@ -842,12 +842,12 @@ TEST(TestExcept, Different_matrix_2) {
 TEST(TestExcept, Different_matrix_3) {
   int rows = 1;
   int cols = 1;
-  S21Matrix M(rows + 1, cols);
-  S21Matrix N(rows, cols);
+  Matrix M(rows + 1, cols);
+  Matrix N(rows, cols);
   N(0, 0) = 1;
 
   try {
-    S21Matrix R = M + N;
+    Matrix R = M + N;
     FAIL();
   } catch (std::invalid_argument& ex) {
     EXPECT_STREQ("Different matrix dimensions.", ex.what());
@@ -855,9 +855,9 @@ TEST(TestExcept, Different_matrix_3) {
 }
 
 TEST(TestExcept, Initialised_matrix) {
-  S21Matrix M;
+  Matrix M;
   try {
-    S21Matrix N = M.CalcComplements();
+    Matrix N = M.CalcComplements();
     FAIL();
   } catch (std::invalid_argument& ex) {
     EXPECT_STREQ("The matrix is not initialised.", ex.what());
@@ -865,7 +865,7 @@ TEST(TestExcept, Initialised_matrix) {
 }
 
 TEST(TestExcept, Index_out_of_range) {
-  S21Matrix M;
+  Matrix M;
   try {
     M(1, 1);
     FAIL();
@@ -875,7 +875,7 @@ TEST(TestExcept, Index_out_of_range) {
 }
 
 TEST(TestExcept, Index_out_of_range_const) {
-  const S21Matrix M;
+  const Matrix M;
   try {
     M(1, 1);
     FAIL();
@@ -885,8 +885,8 @@ TEST(TestExcept, Index_out_of_range_const) {
 }
 
 TEST(TestExcept, Mul_matrix) {
-  S21Matrix M(1, 2);
-  S21Matrix N(1, 2);
+  Matrix M(1, 2);
+  Matrix N(1, 2);
   try {
     M *= N;
     FAIL();
@@ -899,8 +899,8 @@ TEST(TestExcept, Mul_matrix) {
 }
 
 TEST(TestExcept, Sub_matrix) {
-  S21Matrix M(1, 2);
-  S21Matrix N(1, 1);
+  Matrix M(1, 2);
+  Matrix N(1, 1);
   try {
     M -= N;
     FAIL();
@@ -910,7 +910,7 @@ TEST(TestExcept, Sub_matrix) {
 }
 
 TEST(TestExcept, Determinant_less_than_zero) {
-  S21Matrix M(1, 1);
+  Matrix M(1, 1);
   M(0, 0) = 0;
 
   try {
@@ -922,7 +922,7 @@ TEST(TestExcept, Determinant_less_than_zero) {
 }
 
 TEST(TestExcept, Not_square_matrix_determinant) {
-  S21Matrix M(1, 2);
+  Matrix M(1, 2);
   M(0, 0) = 2;
   M(0, 1) = 3;
 
@@ -935,12 +935,12 @@ TEST(TestExcept, Not_square_matrix_determinant) {
 }
 
 TEST(TestExcept, Not_square_matrix_calc_complements) {
-  S21Matrix M(1, 2);
+  Matrix M(1, 2);
   M(0, 0) = 2;
   M(0, 1) = 3;
 
   try {
-    S21Matrix N = M.CalcComplements();
+    Matrix N = M.CalcComplements();
     FAIL();
   } catch (std::invalid_argument& ex) {
     EXPECT_STREQ("The matrix is not square.", ex.what());
@@ -948,7 +948,7 @@ TEST(TestExcept, Not_square_matrix_calc_complements) {
 }
 
 TEST(TestExcept, Set_cols_less_than_zero) {
-  S21Matrix M(1, 2);
+  Matrix M(1, 2);
 
   try {
     M.SetCols(-3);
@@ -959,7 +959,7 @@ TEST(TestExcept, Set_cols_less_than_zero) {
 }
 
 TEST(TestExcept, Set_rows_less_than_zero) {
-  S21Matrix M(1, 2);
+  Matrix M(1, 2);
 
   try {
     M.SetRows(-3);
@@ -970,7 +970,7 @@ TEST(TestExcept, Set_rows_less_than_zero) {
 }
 
 TEST(TestMutator, Set_rows_less) {
-  S21Matrix M(2, 2);
+  Matrix M(2, 2);
   M(0, 0) = 1;
   M(0, 1) = 2;
   M(1, 0) = 3;
@@ -980,7 +980,7 @@ TEST(TestMutator, Set_rows_less) {
 
   int rows = 1;
   int cols = 2;
-  S21Matrix RealRes(rows, cols);
+  Matrix RealRes(rows, cols);
   RealRes(0, 0) = 1;
   RealRes(0, 1) = 2;
 
@@ -992,7 +992,7 @@ TEST(TestMutator, Set_rows_less) {
 }
 
 TEST(TestMutator, Set_rows_more) {
-  S21Matrix M(2, 2);
+  Matrix M(2, 2);
   M(0, 0) = 1;
   M(0, 1) = 2;
   M(1, 0) = 3;
@@ -1002,7 +1002,7 @@ TEST(TestMutator, Set_rows_more) {
 
   int rows = 3;
   int cols = 2;
-  S21Matrix RealRes(rows, cols);
+  Matrix RealRes(rows, cols);
   RealRes(0, 0) = 1;
   RealRes(0, 1) = 2;
   RealRes(1, 0) = 3;
@@ -1018,7 +1018,7 @@ TEST(TestMutator, Set_rows_more) {
 }
 
 TEST(TestMutator, Set_cols_more) {
-  S21Matrix M(2, 2);
+  Matrix M(2, 2);
   M(0, 0) = 1;
   M(0, 1) = 2;
   M(1, 0) = 3;
@@ -1028,7 +1028,7 @@ TEST(TestMutator, Set_cols_more) {
   int cols = 3;
   M.SetCols(cols);
 
-  S21Matrix RealRes(rows, cols);
+  Matrix RealRes(rows, cols);
   RealRes(0, 0) = 1;
   RealRes(0, 1) = 2;
   RealRes(0, 2) = 0;
@@ -1044,7 +1044,7 @@ TEST(TestMutator, Set_cols_more) {
 }
 
 TEST(TestMutator, Set_cols_less) {
-  S21Matrix M(2, 2);
+  Matrix M(2, 2);
   M(0, 0) = 1;
   M(0, 1) = 2;
   M(1, 0) = 3;
@@ -1054,7 +1054,7 @@ TEST(TestMutator, Set_cols_less) {
   int cols = 1;
   M.SetCols(cols);
 
-  S21Matrix RealRes(rows, cols);
+  Matrix RealRes(rows, cols);
   RealRes(0, 0) = 1;
   RealRes(1, 0) = 3;
 
