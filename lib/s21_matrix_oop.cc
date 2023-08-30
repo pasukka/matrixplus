@@ -26,6 +26,27 @@ S21Matrix::~S21Matrix() {
   if (rows_ > 0) delete[] matrix_;
 }
 
+// --------------------- COPY AND MOVE ---------------------
+S21Matrix::S21Matrix(const S21Matrix& other)
+    : rows_(0), cols_(0), matrix_(nullptr) {
+  if (other.rows_ > 0 && other.cols_ > 0) {
+    S21Matrix result(other.rows_, other.cols_);
+    for (int i = 0; i < other.rows_; ++i) {
+      for (int j = 0; j < other.cols_; ++j) {
+        result.matrix_[i][j] = other.matrix_[i][j];
+      }
+    }
+    SwapMatrix(result);
+  }
+}
+
+S21Matrix::S21Matrix(S21Matrix&& other)
+    : rows_(other.rows_), cols_(other.cols_), matrix_(other.matrix_) {
+  other.rows_ = 0;
+  other.cols_ = 0;
+  other.matrix_ = nullptr;
+}
+
 // --------------------- ACCESSORS AND MUTATORS ---------------------
 
 int S21Matrix::GetRows() const noexcept { return rows_; }
@@ -64,27 +85,6 @@ void S21Matrix::SetCols(const int new_cols) {
     }
   }
   SwapMatrix(result);
-}
-
-// --------------------- COPY AND MOVE ---------------------
-S21Matrix::S21Matrix(const S21Matrix& other)
-    : rows_(0), cols_(0), matrix_(nullptr) {
-  if (other.rows_ > 0 && other.cols_ > 0) {
-    S21Matrix result(other.rows_, other.cols_);
-    for (int i = 0; i < other.rows_; ++i) {
-      for (int j = 0; j < other.cols_; ++j) {
-        result.matrix_[i][j] = other.matrix_[i][j];
-      }
-    }
-    SwapMatrix(result);
-  }
-}
-
-S21Matrix::S21Matrix(S21Matrix&& other)
-    : rows_(other.rows_), cols_(other.cols_), matrix_(other.matrix_) {
-  other.rows_ = 0;
-  other.cols_ = 0;
-  other.matrix_ = nullptr;
 }
 
 // --------------------- OPERATIONS ---------------------
@@ -228,6 +228,10 @@ S21Matrix S21Matrix::operator*(const S21Matrix& other) const {
     }
   }
   return result;
+}
+
+const S21Matrix operator*(int number, const S21Matrix& matrix) {
+  return matrix * number;
 }
 
 const S21Matrix& S21Matrix::operator+=(const S21Matrix& other) {

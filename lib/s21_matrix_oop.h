@@ -2,18 +2,18 @@
 #define S21_MATRIX_OOP_LIB_S21_MATRIX_OOP_H_
 
 #include <cmath>
-
 #include <iostream>
 
 const double kEpsilon = 1.0E-8;
 
 class S21Matrix {
  public:
-  S21Matrix() noexcept;               // Default constructor
-  S21Matrix(int rows_, int cols_);    // My constructor
+  S21Matrix() noexcept;             // Default constructor
+  S21Matrix(int rows_, int cols_);  // My constructor
+  ~S21Matrix();                     // Destructor
+
   S21Matrix(const S21Matrix &other);  // Copy
   S21Matrix(S21Matrix &&other);       // Move
-  ~S21Matrix();                       // Destructor
 
   int GetRows() const noexcept;
   int GetCols() const noexcept;
@@ -34,14 +34,18 @@ class S21Matrix {
   bool operator!=(const S21Matrix &other) const noexcept;
   S21Matrix &operator=(const S21Matrix &other);
   S21Matrix &operator=(S21Matrix &&other);
+
   S21Matrix operator+(const S21Matrix &second) const;
   S21Matrix operator-(const S21Matrix &second) const;
   S21Matrix operator*(int number) const;
   S21Matrix operator*(const S21Matrix &other) const;
+  friend const S21Matrix operator*(int number, const S21Matrix &matrix);
+
   const S21Matrix &operator+=(const S21Matrix &other);
   const S21Matrix &operator-=(const S21Matrix &other);
   const S21Matrix &operator*=(const S21Matrix &other);
   const S21Matrix &operator*=(int number) noexcept;
+
   double &operator()(int i, int j);
   double const &operator()(int i, int j) const;
 
@@ -61,3 +65,5 @@ class S21Matrix {
 };
 
 #endif  // S21_MATRIX_OOP_LIB_S21_MATRIX_OOP_H_
+
+const S21Matrix operator*(int number, const S21Matrix &matrix);
