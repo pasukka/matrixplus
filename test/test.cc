@@ -331,6 +331,31 @@ TEST(TestMulNum, Mul_num_oper) {
   }
 }
 
+TEST(TestMulNum, Mul_num_oper_2) {
+  S21Matrix M(2, 2);
+  S21Matrix N(2, 2);
+  M(0, 0) = 1;
+  M(0, 1) = 2;
+  M(1, 0) = 3;
+  M(1, 1) = 4;
+
+  double num = -1;
+
+  S21Matrix R = num * M;
+
+  S21Matrix RealRes(2, 2);
+  RealRes(0, 0) = -1;
+  RealRes(0, 1) = -2;
+  RealRes(1, 0) = -3;
+  RealRes(1, 1) = -4;
+
+  for (int i = 0; i < 2; ++i) {
+    for (int j = 0; j < 2; ++j) {
+      ASSERT_EQ(RealRes(i, j), R(i, j));
+    }
+  }
+}
+
 TEST(TestMulNum, Mul_adding_to_matrix) {
   S21Matrix M(2, 2);
   M(0, 0) = 1;
